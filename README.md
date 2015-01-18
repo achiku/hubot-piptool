@@ -1,4 +1,4 @@
-# hubot-piptool
+# hubot-piptools
 
 Ask your bot if library updates are needed.
 
@@ -6,13 +6,13 @@ Ask your bot if library updates are needed.
 
 - reply which library needs update
 - reply updated list of libraries in requirements.txt ready format
-- major/minor update aware reply
+- major/minor update aware
 
 
 ## Installation
 
-1. add `achiku/hubot-piptool` to package.json
-2. add "hubot-piptool" to external-scripts.json
+1. add `achiku/hubot-piptools` to package.json
+2. add "hubot-piptools" to external-scripts.json
 4. Reboot Hubot
 
 ## Configuration:
@@ -22,6 +22,6 @@ Write config
 ## Commands
 
 ```
-hubot piptool [repositoryName] check
-hubot piptool [repositoryName] review
+hubot piptool check [repositoryName]
+hubot piptool review [repositoryName]
 ```

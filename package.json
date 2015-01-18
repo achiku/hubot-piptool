@@ -4,7 +4,7 @@
   "description": "hubot script checking python library updates",
   "main": "src/index.coffee",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cake test"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,21 @@
   },
   "homepage": "https://github.com/achiku/hubot-piptools",
   "devDependencies": {
-    "hubot": "^2.8.0"
+    "hubot": "^2.8.0",
+    "chai": "^1.10.0",
+    "coffee-script": "^1.8.0",
+    "del": "^1.1.1",
+    "gulp": "^3.8.10",
+    "gulp-coffee": "^2.2.0",
+    "gulp-mocha": "^2.0.0",
+    "gulp-notify": "^2.1.0",
+    "gulp-plumber": "^0.6.6",
+    "gulp-watch": "^3.0.0",
+    "mocha": "^2.1.0"
+  },
+  "dependencies": {
+    "coffee-script": "^1.8.0",
+    "promise.coffee": "^1.0.6",
+    "pypi": "^0.1.2"
   }
 }
