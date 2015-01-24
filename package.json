@@ -36,8 +36,9 @@
     "mocha": "^2.1.0"
   },
   "dependencies": {
+    "base64": "^2.1.0",
     "coffee-script": "^1.8.0",
-    "promise.coffee": "^1.0.6",
+    "github": "^0.2.3",
     "pypi": "^0.1.2"
   }
 }

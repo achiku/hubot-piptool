@@ -7,7 +7,7 @@ class PyPiTools
     @client = new pypi.Client
 
   check: (targetReqFile) =>
-    console.log "check updates: #{@targetReqFile}"
+    console.log "check updates: #{targetReqFile}"
     @_parseRequirements targetReqFile
 
   review: () =>
@@ -34,5 +34,5 @@ class PyPiTools
     current_packages.map(@_fetchRequirementsInfo)
 
 
-tool = new PyPiTools
-tool.check '../requirements/development.txt'
+#tool = new PyPiTools
+#tool.check '../requirements/sample.txt'
