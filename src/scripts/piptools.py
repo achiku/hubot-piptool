@@ -1,40 +1,16 @@
 # -*- coding: utf-8 -*-
+import argparse
 import os
 import base64
 from github import GitHub
 import xmlrpclib
 
 
-class PypiPackage(object):
-    CHAT_TOOL = os.environ.get('CHAT_TOOL')
-
-    def __init__(self, name, current_version, latest_version):
-        self.name = name
-        self.current_version = current_version
-        self.latest_version = latest_version
-
-    def hipchat_format(self, package):
-        if package['is_latest']:
-            print "(successful)\t{} {} == {}".format(
-                package['name'], package['current_version'], package['latest_version'])
-        else:
-            print "(failed)\t{} {} => {}".format(
-                package['name'], package['current_version'], package['latest_version'])
-
-    def slack_format(self, package):
-        if package['is_latest']:
-            print "(:white_check_mark:)\t{} {} == {}".format(
-                package['name'], package['current_version'], package['latest_version'])
-        else:
-            print "(:red_circle:)\t{} {} => {}".format(
-                package['name'], package['current_version'], package['latest_version'])
-
-
 class PipTools(object):
     def __init__(self, user_name, repo_name):
         self.user_name = user_name
         self.repo_name = repo_name
-        self.github_client = GitHub(access_token=os.environ.get('GITHUB_API_TOKEN'))
+        self.github_client = GitHub(access_token=os.environ.get('HUBOT_GITHUB_API_TOKEN'))
         self.pypi_client = xmlrpclib.ServerProxy('https://pypi.python.org/pypi')
 
     def check(self, req_file_path):
@@ -42,6 +18,24 @@ class PipTools(object):
         packages = self._parse_req_file_content(file_content)
         new_packages = [self._update_package(package) for package in packages]
         return new_packages
+
+    @classmethod
+    def hipchat_format(cls, package):
+        if package['is_latest']:
+            print "(successful)\t{} {} == {}".format(
+                package['name'], package['current_version'], package['latest_version'])
+        else:
+            print "(failed)\t{} {} => {}".format(
+                package['name'], package['current_version'], package['latest_version'])
+
+    @classmethod
+    def slack_format(cls, package):
+        if package['is_latest']:
+            print "(:white_check_mark:)\t{} {} == {}".format(
+                package['name'], package['current_version'], package['latest_version'])
+        else:
+            print "(:red_circle:)\t{} {} => {}".format(
+                package['name'], package['current_version'], package['latest_version'])
 
     def _update_package(self, package):
         latest_version = self._get_latest_version(package)
@@ -75,10 +69,22 @@ class PipTools(object):
 
 
 if __name__ == '__main__':
-    t = PipTools(user_name='kanmu', repo_name='clo-admin')
-    packages = t.check('requirements/common.txt')
-    for p in packages:
-        if p['is_latest'] is True:
-            print "(ok)\t{} {} == {}".format(p['name'], p['current_version'], p['latest_version'])
-        else:
-            print "(ng)\t{} {} => {}".format(p['name'], p['current_version'], p['latest_version'])
+    parser = argparse.ArgumentParser(description='PiPy integration with Hubot/Chat tool')
+    parser.add_argument(
+        '-u', '--username',
+        action='store', type=str, dest='user_name',
+        required=True, help='GitHub user name')
+    parser.add_argument(
+        '-r', '--repository',
+        action='store', type=str, dest='repo_name',
+        required=True, help='GitHub repository name')
+    parser.add_argument(
+        '-f', '--req-file-path',
+        action='store', type=str, dest='req_file_path',
+        required=True, help='requirement file path on GitHub repository')
+
+    args = parser.parse_args()
+    t = PipTools(user_name=args.user_name, repo_name=args.repo_name)
+    packages = t.check(args.req_file_path)
+    for p in sorted(packages, key=lambda p: p['is_latest']):
+        PipTools.hipchat_format(p)
