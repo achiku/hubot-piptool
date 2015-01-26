@@ -5,8 +5,8 @@
 #   hubot pip-check <repo name> - Reply if updates are available
 #   hubot pip-review <repo name> - Reply updated requirements
 
-{PyPiTools} = require './piptools'
-{GitHubReqFileParser} = require './githubtools'
+{PyPiTools} = require '../piptools'
+{GitHubReqFileParser} = require '../githubtools'
 github_api_token = process.env.HUBOT_GITHUB_API_TOKEN
 
 module.exports = (robot) ->

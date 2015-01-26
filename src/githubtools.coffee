@@ -32,5 +32,5 @@ class @GitHubReqFileParser
     )
 
 
-# p = new @GitHubReqFileParser 'clo-admin', 'kanmu'
+# p = new @GitHubReqFileParser 'kanmu', 'clo-admin', 'yourtoken'
 # p.fetch 'requirements/common.txt', (current_packages) -> console.log current_packages
