@@ -2,37 +2,29 @@ pypi = require 'pypi'
 fs = require 'fs'
 
 
-class PyPiTools
+class @PyPiTools
   constructor: () ->
     @client = new pypi.Client
 
-  check: (targetReqFile) =>
-    console.log "check updates: #{targetReqFile}"
-    @_parseRequirements targetReqFile
+  check: (lib, callback) =>
+    @_checkUpdate lib, callback
 
-  review: () =>
-    console.log "review updates: #{@targetReqFile}"
-
-  _fetchRequirementsInfo: (lib) =>
+  _checkUpdate: (lib, callback) =>
     @client.getPackageReleases lib.name, (versions) ->
       latest_version = versions.sort()[versions.length - 1]
-      if lib.current_version != latest_version
-        console.log "[x] #{lib.name}: #{lib.current_version} -> #{latest_version}"
-      else
-        console.log "#{lib.name}: #{lib.current_version} = #{latest_version}"
-
-  _parseRequirements: (targetReqFile) =>
-    libs = fs.readFileSync targetReqFile
-      .toString()
-      .split('\n')
-    current_packages = []
-    for lib in libs
-      if lib != '' and not lib.match('^-r') and not lib.match('^#')
-        [name, current_version] = lib.split('==')
-        current_packages.push {name: name, current_version: current_version}
-
-    current_packages.map(@_fetchRequirementsInfo)
+      is_latest = if lib.current_version == latest_version then true else false
+      callback({
+        name: lib.name,
+        current_version: lib.current_version,
+        latest_version: latest_version
+        is_latest: is_latest
+      })
 
 
-#tool = new PyPiTools
-#tool.check '../requirements/sample.txt'
+# tool = new @PyPiTools
+# tool.check {name: 'awscli', current_version: '1.6.10'}, (lib) ->
+#   console.log lib
+#   if not lib.is_latest
+#     console.log "[x] #{lib.name}: #{lib.current_version} -> #{lib.latest_version}"
+#   else
+#     console.log "#{lib.name}: #{lib.current_version} = #{lib.latest_version}"

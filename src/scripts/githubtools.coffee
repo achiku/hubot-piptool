@@ -1,10 +1,8 @@
 GitHubApi = require 'github'
 Base64 = require 'Base64'
 
-
-class GitHubReqFileParser
-  constructor: (@repositoryName, @user) ->
-    @token = process.env.GITHUB_API_TOKEN
+class @GitHubReqFileParser
+  constructor: (@userName, @repositoryName, @github_api_token) ->
     @client = new GitHubApi(
       version: "3.0.0"
       debug: false
@@ -13,25 +11,26 @@ class GitHubReqFileParser
     )
     @client.authenticate(
       type: 'oauth'
-      token: @token
+      token: @github_api_token
     )
 
-  _func: (err, res) ->
-    current_packages = []
-    for lib in Base64.decode(res.content).split('\n')
-      if lib != '' and not lib.match('^-r') and not lib.match('^#')
-        [name, current_version] = lib.split('==')
-        current_packages.push {name: name, current_version: current_version}
-        console.log name, current_version
+  _createPackageList: (callback) ->
+    return (err, res) ->
+      current_packages = []
+      for lib in Base64.decode(res.content).split('\n')
+        if lib != '' and not lib.match('^-r') and not lib.match('^#')
+          [name, current_version] = lib.split('==')
+          current_packages.push {name: name, current_version: current_version}
+      callback(current_packages)
 
-  fetch: (reqFilePath) =>
+  fetch: (reqFilePath, callback) =>
     @client.repos.getContent(
-      user: @user
+      user: @userName
       repo: @repositoryName
       path: reqFilePath
-    , @_func
+    , @_createPackageList(callback)
     )
 
 
-# p = new GitHubReqFileParser 'clo-admin', 'kanmu'
-# p.fetch 'requirements/development.txt'
+# p = new @GitHubReqFileParser 'clo-admin', 'kanmu'
+# p.fetch 'requirements/common.txt', (current_packages) -> console.log current_packages
