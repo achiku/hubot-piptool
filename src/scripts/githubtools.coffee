@@ -1,5 +1,5 @@
 GitHubApi = require 'github'
-Base64 = require 'Base64'
+Base64 = require 'base64'
 
 class @GitHubReqFileParser
   constructor: (@userName, @repositoryName, @github_api_token) ->
