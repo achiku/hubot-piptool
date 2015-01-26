@@ -1,6 +1,6 @@
 {
   "name": "hubot-piptools",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "hubot script checking python library updates",
   "main": "src/index.coffee",
   "scripts": {
