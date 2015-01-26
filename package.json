@@ -29,7 +29,7 @@
     "mocha": "^2.1.0"
   },
   "dependencies": {
-    "Base64": "^0.3.0",
+    "base64": "^2.1.0",
     "coffee-script": "^1.8.0",
     "github": "^0.2.3",
     "pypi": "^0.1.2"
