@@ -5,9 +5,11 @@
 #   hubot pip-check <repo name> - Reply if updates are available
 #   hubot pip-review <repo name> - Reply updated requirements
 
-{PyPiTools} = require './piptools'
-{GitHubReqFileParser} = require './githubtools'
+{PyPiTools} = require '../piptools'
+{GitHubReqFileParser} = require '../githubtools'
 github_api_token = process.env.HUBOT_GITHUB_API_TOKEN
+success = (process.env.HUBOT_EMOTICON_SUCCESS or "(successful)")
+fail = (process.env.HUBOT_EMOTICON_FAIL or "(failed)")
 
 module.exports = (robot) ->
   robot.respond /(pip-check) (.+) (.+) (.+)/i, (msg) ->
@@ -22,9 +24,9 @@ module.exports = (robot) ->
       for p in current_packages
         pypi.check p, (lib) ->
           if lib.is_latest
-            line = "(successful)\t#{lib.name} #{lib.current_version} = #{lib.latest_version}\n"
+            line = "#{success}\t#{lib.name} #{lib.current_version} = #{lib.latest_version}\n"
           else
-            line = "(failed)\t#{lib.name} #{lib.current_version} < #{lib.latest_version}\n"
+            line = "#{fail}\t#{lib.name} #{lib.current_version} < #{lib.latest_version}\n"
           msg.send line
 
   robot.respond /(pip-review) (\w+)/, (msg) ->

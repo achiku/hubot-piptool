@@ -1,5 +1,5 @@
 GitHubApi = require 'github'
-Base64 = require 'Base64'
+Base64 = require 'base64'
 
 class @GitHubReqFileParser
   constructor: (@userName, @repositoryName, @github_api_token) ->
@@ -32,5 +32,5 @@ class @GitHubReqFileParser
     )
 
 
-# p = new @GitHubReqFileParser 'clo-admin', 'kanmu'
+# p = new @GitHubReqFileParser 'kanmu', 'clo-admin', 'yourtoken'
 # p.fetch 'requirements/common.txt', (current_packages) -> console.log current_packages
