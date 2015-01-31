@@ -2,6 +2,9 @@
 
 Ask your bot if library updates are needed.
 
+![sample](https://github.com/achiku/hubot-piptools/raw/master/hipchat-sample.png "hipchat sample image")
+
+
 ## What it can do
 
 - reply which library needs update
@@ -18,10 +21,17 @@ Ask your bot if library updates are needed.
 
 ## Configuration:
 
-create proper GitHub API token and set to the following environmental variable.
+Create proper GitHub API token and set to the following environmental variable.
 
 ```
 HUBOT_GITHUB_API_TOKEN
+```
+
+Set emoticons for your chattool.
+
+```
+HUBOT_EMOTICON_SUCCESS
+HUBOT_EMOTICON_FAIL
 ```
 
 ## Commands
