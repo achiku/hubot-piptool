@@ -5,8 +5,9 @@
 #   hubot pip-check <repo name> - Reply if updates are available
 #   hubot pip-review <repo name> - Reply updated requirements
 
-{PyPiTools} = require '../piptools'
+Promise = require 'promise'
 {GitHubReqFileParser} = require '../githubtools'
+{PyPiTools} = require '../piptools'
 github_api_token = process.env.HUBOT_GITHUB_API_TOKEN
 success = (process.env.HUBOT_EMOTICON_SUCCESS or "(successful)")
 fail = (process.env.HUBOT_EMOTICON_FAIL or "(failed)")
@@ -17,17 +18,15 @@ module.exports = (robot) ->
     repository = msg.match[3]
     reqFilePath = msg.match[4]
     msg.reply "check #{userName}/#{repository}:#{reqFilePath}"
-
     pypi = new PyPiTools
     gh = new GitHubReqFileParser userName, repository, github_api_token
-    gh.fetch reqFilePath, (current_packages) ->
-      for p in current_packages
-        pypi.check p, (lib) ->
+    gh.get(reqFilePath).then (libs) ->
+      list = (pypi.check(lib) for lib in libs)
+      Promise.all(list).then (libs) ->
+        output = "library update info \n"
+        for lib in libs
           if lib.is_latest
-            line = "#{success}\t#{lib.name} #{lib.current_version} = #{lib.latest_version}\n"
+            output += "#{success}\t#{lib.name} #{lib.current_version} = #{lib.latest_version}\n"
           else
-            line = "#{fail}\t#{lib.name} #{lib.current_version} < #{lib.latest_version}\n"
-          msg.send line
-
-  robot.respond /(pip-review) (\w+)/, (msg) ->
-    msg.send 'review ' + msg.match[2]
+            output += "#{fail}\t#{lib.name} #{lib.current_version} < #{lib.latest_version}\n"
+        msg.send output
