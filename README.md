@@ -37,5 +37,5 @@ HUBOT_EMOTICON_FAIL
 ## Commands
 
 ```
-hubot pip-check [github_user_name] [repositoryName] [relative path to requirements.txt]
+hubot pip-check [githubUserName] [repositoryName] [relative path to requirements.txt]
 ```
