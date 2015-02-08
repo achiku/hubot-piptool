@@ -3,10 +3,10 @@ GitHubApi = require 'github'
 Promise = require 'promise'
 
 class @GitHubReqFileParser
-  constructor: (@userName, @repositoryName, @github_api_token) ->
+  constructor: (@userName, @repositoryName, @github_api_token, debug=false) ->
     @client = new GitHubApi(
       version: "3.0.0"
-      debug: false
+      debug: debug
       protocol: "https"
       timeout: 5000
     )
@@ -30,9 +30,3 @@ class @GitHubReqFileParser
       (err) ->
         console.log err
     )
-
-
-# p = new @GitHubReqFileParser 'kanmu', 'clo-admin', 'yourtoken'
-# p.get('requirements/common.txt').then(
-#   (packages) -> console.log packages
-# )
