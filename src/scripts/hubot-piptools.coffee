@@ -3,7 +3,6 @@
 #
 # Commands:
 #   hubot pip-check <repo name> - Reply if updates are available
-#   hubot pip-review <repo name> - Reply updated requirements
 
 Promise = require 'promise'
 {GitHubReqFileParser} = require '../githubtools'
