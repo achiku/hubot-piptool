@@ -1,4 +1,3 @@
-Base64 = require 'base64'
 GitHubApi = require 'github'
 Promise = require 'promise'
 
@@ -21,7 +20,7 @@ class @GitHubReqFileParser
     @githubGetContent(params).then(
       (res) ->
         current_packages = []
-        for lib in Base64.decode(res.content).split('\n')
+        for lib in (new Buffer(res.content, 'base64')).toString().split('\n')
           if lib != '' and not lib.match('^-r') and not lib.match('^#')
             [name, current_version] = lib.split('==')
             current_packages.push {name: name, current_version: current_version}
